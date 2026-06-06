@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NexKart - India's Best Online Bazaar</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; color: #333; background: #f5f5f5; }
+
+    /* ── TOP BAR ── */
+    .top-bar {
+      background: #1a1a2e;
+      color: #ccc;
+      font-size: 12px;
+      padding: 6px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .top-bar a { color: #f0a500; text-decoration: none; }
+    .top-bar a:hover { text-decoration: underline; }
+
+    /* ── HEADER ── */
+    header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo { display: flex; flex-direction: column; }
+    .logo-name {
+      font-size: 26px;
+      font-weight: 800;
+      color: #f0a500;
+      letter-spacing: 1px;
+    }
+    .logo-tagline { font-size: 11px; color: #aaa; letter-spacing: 2px; }
+
+    .search-bar {
+      flex: 1;
+      max-width: 500px;
+      display: flex;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .search-bar input {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      font-size: 14px;
+      outline: none;
+    }
+    .search-bar button {
+      padding: 10px 18px;
+      background: #f0a500;
+      border: none;
+      font-weight: 700;
+      cursor: pointer;
+      color: #1a1a2e;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+    .search-bar button:hover { background: #d4920a; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-actions a {
+      color: #ccc;
+      text-decoration: none;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transition: color 0.2s;
+    }
+    .header-actions a:hover { color: #f0a500; }
+    .header-actions .icon { font-size: 20px; }
+    .badge {
+      background: #e74c3c;
+      color: #fff;
+      border-radius: 50%;
+      padding: 1px 5px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* Account Dropdown */
+    .account-wrapper { position: relative; }
+    .account-btn {
+      background: none;
+      border: none;
+      color: #ccc;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      transition: color 0.2s;
+    }
+    .account-btn:hover { color: #f0a500; }
+    .account-btn .icon { font-size: 20px; }
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      width: 300px;
+      z-index: 2000;
+    }
+    .account-wrapper:hover .dropdown { display: block; }
+    .dropdown-header {
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      color: #fff;
+      padding: 16px;
+      border-radius: 8px 8px 0 0;
+    }
+    .dropdown-header .user-name { font-weight: 700; font-size: 15px; }
+    .dropdown-header .user-email { font-size: 12px; color: #aaa; }
+    .dropdown-section { padding: 12px 16px; border-bottom: 1px solid #eee; }
+    .dropdown-section h4 { font-size: 12px; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+    .order-mini {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      font-size: 13px;
+    }
+    .order-mini .order-id { color: #1a1a2e; font-weight: 600; }
+    .order-mini .order-status {
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .status-delivered { background: #e8f5e9; color: #2e7d32; }
+    .status-shipped { background: #fff3e0; color: #e65100; }
+    .status-processing { background: #e3f2fd; color: #1565c0; }
+    .dropdown-links { padding: 8px 0; }
+    .dropdown-links a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 16px;
+      color: #333;
+      text-decoration: none;
+      font-size: 13px;
+      transition: background 0.15s;
+    }
+    .dropdown-links a:hover { background: #f5f5f5; color: #f0a500; }
+    .logout-btn {
+      width: 100%;
+      padding: 10px 16px;
+      background: none;
+      border: none;
+      border-top: 1px solid #eee;
+      color: #e74c3c;
+      text-align: left;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 0 0 8px 8px;
+      transition: background 0.15s;
+    }
+    .logout-btn:hover { background: #ffeaea; }
+    .login-prompt { padding: 20px 16px; text-align: center; }
+    .login-prompt p { color: #666; font-size: 13px; margin-bottom: 12px; }
+    .btn-login, .btn-signup {
+      display: block;
+      width: 100%;
+      padding: 9px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      margin-bottom: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn-login { background: #f0a500; color: #1a1a2e; }
+    .btn-signup { background: #1a1a2e; color: #fff; }
+    .btn-login:hover, .btn-signup:hover { opacity: 0.88; }
+
+    /* ── NAV ── */
+    nav {
+      background: #16213e;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav::-webkit-scrollbar { display: none; }
+    nav a {
+      color: #ccc;
+      text-decoration: none;
+      padding: 12px 18px;
+      font-size: 13px;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+    nav a:hover, nav a.active { background: #f0a500; color: #1a1a2e; }
+
+    /* ── TICKER ── */
+    .ticker {
+      background: #f0a500;
+      color: #1a1a2e;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .ticker-inner {
+      display: inline-block;
+      animation: ticker 25s linear infinite;
+    }
+    @keyframes ticker {
+      0% { transform: translateX(100vw); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: #fff;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .hero h1 { font-size: clamp(24px, 5vw, 42px); font-weight: 800; margin-bottom: 10px; }
+    .hero h1 mark { background: none; color: #f0a500; }
+    .hero p { font-size: 15px; color: #bbb; margin-bottom: 28px; }
+    .trust-badges {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .trust-badge {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ── CATEGORIES ── */
+    .section { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-title a { font-size: 14px; color: #f0a500; text-decoration: none; }
+    .section-title a:hover { text-decoration: underline; }
+
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 16px;
+    }
+    .cat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 18px 10px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      color: #333;
+    }
+    .cat-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .cat-icon { font-size: 30px; margin-bottom: 8px; }
+    .cat-name { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+
+    /* ── PRODUCTS ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0,0,0,0.12); }
+    .product-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .badge-bestseller { background: #ff6b35; color: #fff; }
+    .badge-hot { background: #e74c3c; color: #fff; }
+    .badge-new { background: #27ae60; color: #fff; }
+
+    .product-img {
+      width: 100%;
+      height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 60px;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+    .product-info { padding: 14px; }
+    .product-brand { font-size: 11px; color: #999; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+    .product-name { font-size: 14px; font-weight: 600; color: #1a1a2e; margin: 4px 0 6px; line-height: 1.3; }
+    .rating { font-size: 12px; color: #f0a500; margin-bottom: 8px; }
+    .rating span { color: #999; }
+    .price-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+    .price-now { font-size: 18px; font-weight: 800; color: #1a1a2e; }
+    .price-old { font-size: 13px; color: #999; text-decoration: line-through; }
+    .discount { font-size: 12px; font-weight: 700; color: #27ae60; }
+    .card-actions { padding: 0 14px 14px; display: flex; gap: 8px; }
+    .btn-cart {
+      flex: 1;
+      padding: 9px;
+      background: #f0a500;
+      border: none;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      color: #1a1a2e;
+      transition: background 0.2s;
+    }
+    .btn-cart:hover { background: #d4920a; }
+    .btn-wish {
+      padding: 9px 12px;
+      background: none;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-wish:hover { border-color: #e74c3c; color: #e74c3c; }
+
+    /* ── FEATURES ── */
+    .features-strip {
+      background: #1a1a2e;
+      color: #fff;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0;
+      text-align: center;
+    }
+    .feature-item { padding: 24px 16px; border-right: 1px solid rgba(255,255,255,0.08); }
+    .feature-item:last-child { border-right: none; }
+    .feature-icon { font-size: 28px; margin-bottom: 8px; }
+    .feature-title { font-size: 14px; font-weight: 700; color: #f0a500; margin-bottom: 4px; }
+    .feature-desc { font-size: 12px; color: #aaa; }
+
+    /* ── MODAL (Login/Signup) ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 9000;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      width: 100%;
+      max-width: 400px;
+      margin: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      padding: 24px;
+      text-align: center;
+    }
+    .modal-header .logo-name { font-size: 22px; }
+    .modal-header p { color: #aaa; font-size: 13px; margin-top: 4px; }
+    .modal-tabs {
+      display: flex;
+      border-bottom: 1px solid #eee;
+    }
+    .modal-tab {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #999;
+      border-bottom: 3px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .modal-tab.active { color: #f0a500; border-bottom-color: #f0a500; }
+    .modal-body { padding: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #555; margin-bottom: 5px; }
+    .form-group input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus { border-color: #f0a500; }
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      background: #f0a500;
+      border: none;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1a1a2e;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-submit:hover { background: #d4920a; }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #aaa;
+      cursor: pointer;
+      z-index: 1;
+    }
+    .modal { position: relative; }
+
+    /* ── ORDER HISTORY PAGE (inline panel) ── */
+    #orders-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 8000;
+      background: rgba(0,0,0,0.55);
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+    #orders-panel.open { display: flex; }
+    .orders-drawer {
+      background: #f5f5f5;
+      width: 100%;
+      max-width: 480px;
+      height: 100%;
+      overflow-y: auto;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.2);
+    }
+    .drawer-header {
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      color: #fff;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    .drawer-header h2 { font-size: 18px; }
+    .drawer-close { background: none; border: none; color: #fff; font-size: 22px; cursor: pointer; }
+    .drawer-content { padding: 20px; }
+    .user-summary {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .user-avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f0a500, #ff6b35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: #fff;
+      font-weight: 700;
+    }
+    .user-details h3 { font-size: 16px; color: #1a1a2e; }
+    .user-details p { font-size: 13px; color: #888; margin-top: 2px; }
+    .order-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .order-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 12px;
+    }
+    .order-card-header .oid { font-weight: 700; color: #1a1a2e; font-size: 14px; }
+    .order-card-header .odate { font-size: 12px; color: #999; margin-top: 2px; }
+    .status-pill {
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .order-items { font-size: 13px; color: #555; margin-bottom: 10px; }
+    .order-items li { margin-bottom: 4px; list-style: disc; margin-left: 16px; }
+    .order-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+    }
+    .order-total { font-weight: 700; color: #1a1a2e; font-size: 15px; }
+    .btn-track {
+      padding: 6px 14px;
+      background: #f0a500;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      color: #1a1a2e;
+      transition: background 0.2s;
+    }
+    .btn-track:hover { background: #d4920a; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #1a1a2e;
+      color: #ccc;
+      padding: 40px 20px 20px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto 30px;
+    }
+    .footer-col h4 { color: #f0a500; font-size: 14px; margin-bottom: 14px; letter-spacing: 1px; text-transform: uppercase; }
+    .footer-col p { font-size: 13px; line-height: 1.6; color: #aaa; }
+    .footer-col a { display: block; color: #aaa; text-decoration: none; font-size: 13px; margin-bottom: 7px; transition: color 0.2s; }
+    .footer-col a:hover { color: #f0a500; }
+    .footer-contact { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13px; }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.08);
+      padding-top: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ── CHAT BUTTON ── */
+    .chat-fab {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 5000;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+    .chat-fab:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,211,102,0.5); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 40px 16px; }
+      .trust-badges { gap: 12px; }
+      .trust-badge { font-size: 11px; padding: 8px 12px; }
+      .products-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ TOP BAR ══ -->
+<div class="top-bar">
+  <span>📞 <a href="tel:9131142099">9131142099</a> &nbsp;|&nbsp; ✉️ support@nexkart.com</span>
+  <span>
+    <a href="#">Track Order</a> &nbsp;|&nbsp;
+    <a href="#">Become a Seller</a> &nbsp;|&nbsp;
+    <a href="[wa.me](https://wa.me/919131142099)" target="_blank">WhatsApp Help</a>
+  </span>
+</div>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="logo">
+    <span class="logo-name">NexKart</span>
+    <span class="logo-tagline">INDIA'S BEST ONLINE BAZAAR</span>
+  </div>
+
+  <div class="search-bar">
+    <input type="text" placeholder="Search products, brands, categories..." />
+    <button>SEARCH</button>
+  </div>
+
+  <div class="header-actions">
+    <a href="#" onclick="openWishlist()">
+      <span class="icon">♥</span>
+      <span>Wishlist <span class="badge" id="wish-count">0</span></span>
+    </a>
+    <a href="#" onclick="openCart()">
+      <span class="icon">🛒</span>
+      <span>Cart <span class="badge" id="cart-count">0</span></span>
+    </a>
+
+    <!-- Account Dropdown -->
+    <div class="account-wrapper" id="account-wrapper">
+      <button class="account-btn">
+        <span class="icon">👤</span>
+        <span id="account-label">Account</span>
+      </button>
+
+      <!-- LOGGED OUT STATE -->
+      <div class="dropdown" id="dropdown-loggedout">
+        <div class="dropdown-header">
+          <div class="user-name">Welcome to NexKart!</div>
+          <div class="user-email">Login to view orders & more</div>
+        </div>
+        <div class="login-prompt">
+          <p>Sign in or create your account to track orders, save wishlist, and get personalized deals.</p>
+          <button class="btn-login" onclick="openModal('login')">Login</button>
+          <button class="btn-signup" onclick="openModal('signup')">Create Account</button>
+        </div>
+      </div>
+
+      <!-- LOGGED IN STATE -->
+      <div class="dropdown" id="dropdown-loggedin" style="display:none;">
+        <div class="dropdown-header">
+          <div class="user-name" id="dd-username">Rahul Sharma</div>
+          <div class="user-email" id="dd-email">rahul@email.com</div>
+        </div>
+        <div class="dropdown-section">
+          <h4>Recent Orders</h4>
+          <div class="order-mini">
+            <span class="order-id">#NXK-10421</span>
+            <span class="order-status status-delivered">Delivered</span>
+          </div>
+          <div class="order-mini">
+            <span class="order-id">#NXK-10387</span>
+            <span class="order-status status-shipped">Shipped</span>
+          </div>
+          <div class="order-mini">
+            <span class="order-id">#NXK-10351</span>
+            <span class="order-status status-processing">Processing</span>
+          </div>
+        </div>
+        <div class="dropdown-links">
+          <a href="#" onclick="openOrdersPanel(); return false;">📦 My Orders</a>
+          <a href="#">👤 My Profile</a>
+          <a href="#">📍 Saved Addresses</a>
+          <a href="#">💳 Payment Methods</a>
+          <a href="#">❤️ Wishlist</a>
+          <a href="#">🔔 Notifications</a>
+        </div>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="active">Home</a>
+  <a href="#">Fashion</a>
+  <a href="#">New Arrivals</a>
+  <a href="#">Electronics</a>
+  <a href="#">Home & Kitchen</a>
+  <a href="#">Beauty</a>
+  <a href="#">Toys</a>
+  <a href="#">Sports</a>
+  <a href="#">Books</a>
+  <a href="#">Grocery</a>
+</nav>
+
+<!-- ══ TICKER ══ -->
+<div class="ticker">
+  <span class="ticker-inner">
+    ⚡ FLAT 40% OFF on Fashion &nbsp;|&nbsp; 📱 Electronics Mega Sale – Up to 60% OFF &nbsp;|&nbsp;
+    🚚 Free Delivery on your first order &nbsp;|&nbsp; 🎁 Use code FIRSTORDER for free delivery &nbsp;|&nbsp;
+    🔥 New arrivals every day &nbsp;|&nbsp; ⚡ FLAT 40% OFF on Fashion &nbsp;|&nbsp;
+    📱 Electronics Mega Sale – Up to 60% OFF
+  </span>
+</div>
+
+<!-- ══ HERO ══ -->
+<div class="hero">
+  <h1>India's <mark>Best Value</mark> Online Store</h1>
+  <p>Millions of products. Best prices. Delivered to your door.</p>
+  <div class="trust-badges">
+    <div class="trust-badge">🚚 Free Delivery above ₹499</div>
+    <div class="trust-badge">↺ Easy 7-Day Returns</div>
+    <div class="trust-badge">✓ 100% Genuine Products</div>
+    <div class="trust-badge">🔒 Secure Payment</div>
+    <div class="trust-badge">📞 24/7 Support</div>
+  </div>
+</div>
+
+<!-- ══ CATEGORIES ══ -->
+<div class="section">
+  <div class="section-title">
+    Shop by Category
+    <a href="#">View All</a>
+  </div>
+  <div class="categories-grid">
+    <a href="#" class="cat-card"><div class="cat-icon">👗</div><div class="cat-name">Fashion</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">📱</div><div class="cat-name">Electronics</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">🏠</div><div class="cat-name">Home & Kitchen</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">💄</div><div class="cat-name">Beauty</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">🧸</div><div class="cat-name">Toys</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">🏏</div><div class="cat-name">Sports</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">📚</div><div class="cat-name">Books</div></a>
+    <a href="#" class="cat-card"><div class="cat-icon">🛒</div><div class="cat-name">Grocery</div></a>
+  </div>
+</div>
+
+<!-- ══ FEATURES STRIP ══ -->
+<div class="features-strip">
+  <div class="feature-item">
+    <div class="feature-icon">🚚</div>
+    <div class="feature-title">Free Delivery</div>
+    <div class="feature-desc">On orders above ₹499</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-icon">↺</div>
+    <div class="feature-title">Easy Returns</div>
+    <div class="feature-desc">7-day return policy</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-icon">✓</div>
+    <div class="feature-title">100% Genuine</div>
+    <div class="feature-desc">Verified products only</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-icon">🔒</div>
+    <div class="feature-title">Secure Payment</div>
+    <div class="feature-desc">100% safe checkout</div>
+  </div>
+  <div class="feature-item">
+    <div class="feature-icon">📞</div>
+    <div class="feature-title">24/7 Support</div>
+    <div class="feature-desc">Always here to help</div>
+  </div>
+</div>
+
+<!-- ══ FEATURED PRODUCTS ══ -->
+<div class="section">
+  <div class="section-title">
+    Featured Products
+    <a href="#">View All</a>
+  </div>
+  <div class="products-grid">
+
+    <div class="product-card">
+      <span class="product-badge badge-bestseller">Bestseller</span>
+      <div class="product-img">👗</div>
+      <div class="product-info">
+        <div class="product-brand">Fabindia Style</div>
+        <div class="product-name">Premium Silk Kurta Set</div>
+        <div class="rating">★★★★☆ <span>4.5 (1,247 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹1,299</span>
+          <span class="price-old">₹2,999</span>
+          <span class="discount">57% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-hot">Hot</span>
+      <div class="product-img">🎧</div>
+      <div class="product-info">
+        <div class="product-brand">SoundMax Pro</div>
+        <div class="product-name">Wireless Noise Cancelling Headphones</div>
+        <div class="rating">★★★★☆ <span>4.3 (892 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹2,499</span>
+          <span class="price-old">₹5,999</span>
+          <span class="discount">58% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-new">New</span>
+      <div class="product-img">🍱</div>
+      <div class="product-info">
+        <div class="product-brand">KitchenKing</div>
+        <div class="product-name">Stainless Steel Tiffin Box Set</div>
+        <div class="rating">★★★★☆ <span>4.7 (3,421 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹549</span>
+          <span class="price-old">₹999</span>
+          <span class="discount">45% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-bestseller">Bestseller</span>
+      <div class="product-img">✨</div>
+      <div class="product-info">
+        <div class="product-brand">GlowGuru</div>
+        <div class="product-name">Vitamin C Face Serum 30ml</div>
+        <div class="rating">★★★★☆ <span>4.2 (2,156 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹399</span>
+          <span class="price-old">₹899</span>
+          <span class="discount">56% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-hot">Hot</span>
+      <div class="product-img">🚗</div>
+      <div class="product-info">
+        <div class="product-brand">PlayZone</div>
+        <div class="product-name">Kids Remote Control Car</div>
+        <div class="rating">★★★★☆ <span>4.4 (678 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹799</span>
+          <span class="price-old">₹1,799</span>
+          <span class="discount">56% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-new">New</span>
+      <div class="product-img">🏏</div>
+      <div class="product-info">
+        <div class="product-brand">SportKing</div>
+        <div class="product-name">Cricket Bat English Willow</div>
+        <div class="rating">★★★★☆ <span>4.6 (543 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹1,899</span>
+          <span class="price-old">₹3,499</span>
+          <span class="discount">46% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-bestseller">Bestseller</span>
+      <div class="product-img">📖</div>
+      <div class="product-info">
+        <div class="product-brand">BestReads</div>
+        <div class="product-name">The Psychology of Money</div>
+        <div class="rating">★★★★★ <span>4.8 (5,421 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹299</span>
+          <span class="price-old">₹499</span>
+          <span class="discount">40% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-hot">Hot</span>
+      <div class="product-img">🌾</div>
+      <div class="product-info">
+        <div class="product-brand">IndiaFarm</div>
+        <div class="product-name">Premium Basmati Rice 5kg</div>
+        <div class="rating">★★★★☆ <span>4.5 (1,876 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹549</span>
+          <span class="price-old">₹749</span>
+          <span class="discount">27% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-new">New</span>
+      <div class="product-img">📺</div>
+      <div class="product-info">
+        <div class="product-brand">ViewMax</div>
+        <div class="product-name">Smart LED TV 43" 4K Ultra HD</div>
+        <div class="rating">★★★★☆ <span>4.4 (234 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹22,999</span>
+          <span class="price-old">₹39,999</span>
+          <span class="discount">43% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-hot">Hot</span>
+      <div class="product-img">👜</div>
+      <div class="product-info">
+        <div class="product-brand">Trendy</div>
+        <div class="product-name">Women Designer Handbag</div>
+        <div class="rating">★★★★☆ <span>4.3 (967 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹899</span>
+          <span class="price-old">₹2,499</span>
+          <span class="discount">64% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-bestseller">Bestseller</span>
+      <div class="product-img">🍟</div>
+      <div class="product-info">
+        <div class="product-brand">KitchenKing</div>
+        <div class="product-name">Digital Air Fryer 4.5L</div>
+        <div class="rating">★★★★☆ <span>4.6 (1,432 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹3,499</span>
+          <span class="price-old">₹6,999</span>
+          <span class="discount">50% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+    <div class="product-card">
+      <span class="product-badge badge-new">New</span>
+      <div class="product-img">🧘</div>
+      <div class="product-info">
+        <div class="product-brand">FitIndia</div>
+        <div class="product-name">Anti-Slip Yoga Mat 6mm</div>
+        <div class="rating">★★★★☆ <span>4.5 (2,103 reviews)</span></div>
+        <div class="price-row">
+          <span class="price-now">₹599</span>
+          <span class="price-old">₹1,299</span>
+          <span class="discount">54% OFF</span>
+        </div>
+      </div>
+      <div class="card-actions">
+        <button class="btn-cart" onclick="addToCart(this)">Add to Cart</button>
+        <button class="btn-wish">♥</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>NexKart</h4>
+      <p>India's best online bazaar where you find everything at the best price, delivered right to your door.</p>
+      <div class="footer-contact">📞 <a href="tel:9131142099" style="color:#f0a500;">9131142099</a></div>
+      <div class="footer-contact">✉️ <a href="mailto:support@nexkart.com" style="color:#f0a500;">support@nexkart.com</a></div>
+    </div>
+    <div class="footer-col">
+      <h4>Sell on NexKart</h4>
+      <a href="#">Register as Seller</a>
+      <a href="#">Seller Dashboard</a>
+      <a href="#">How to Sell</a>
+      <a href="[wa.me](https://wa.me/919131142099)" target="_blank">Seller Support</a>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+      <a href="#">Press</a>
+      <a href="#">Blog</a>
+    </div>
+    <div class="footer-col">
+      <h4>Help & Support</h4>
+      <a href="#">Track Your Order</a>
+      <a href="#">Return Policy</a>
+      <a href="#">Shipping Information</a>
+      <a href="[wa.me](https://wa.me/919131142099)" target="_blank">Customer Support</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2025 NexKart. All rights reserved. &nbsp;|&nbsp; Made with ❤️ in India 🇮🇳
+  </div>
+</footer>
+
+<!-- ══ CHAT BUTTON ══ -->
+<a class="chat-fab" href="[wa.me](https://wa.me/919131142099)" target="_blank">
+  💬 Chat with Us
+</a>
+
+<!-- ══ LOGIN / SIGNUP MODAL ══ -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-header">
+      <div class="logo-name">NexKart</div>
+      <p>India's Best Online Store</p>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="modal-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+    </div>
+
+    <!-- LOGIN FORM -->
+    <div class="modal-body" id="form-login">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="login-email" placeholder="Enter your email" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="login-password" placeholder="Enter your password" />
+      </div>
+      <button class="btn-submit" onclick="doLogin()">Login to NexKart</button>
+      <p style="text-align:center; margin-top:12px; font-size:13px; color:#888;">
+        <a href="#" style="color:#f0a500;">Forgot Password?</a>
+      </p>
+    </div>
+
+    <!-- SIGNUP FORM -->
+    <div class="modal-body" id="form-signup" style="display:none;">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="signup-name" placeholder="Enter your full name" />
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="signup-email" placeholder="Enter your email" />
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="signup-phone" placeholder="Enter your phone number" />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="signup-password" placeholder="Create a password" />
+      </div>
+      <button class="btn-submit" onclick="doSignup()">Create My Account</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ORDERS DRAWER ══ -->
+<div id="orders-panel">
+  <div class="orders-drawer">
+    <div class="drawer-header">
+      <h2>📦 My Orders</h2>
+      <button class="drawer-close" onclick="closeOrdersPanel()">✕</button>
+    </div>
+    <div class="drawer-content">
+
+      <div class="user-summary">
+        <div class="user-avatar" id="drawer-avatar">R</div>
+        <div class="user-details">
+          <h3 id="drawer-name">Rahul Sharma</h3>
+          <p id="drawer-email">rahul@email.com</p>
+          <p style="font-size:12px; color:#f0a500; margin-top:4px;">NexKart Member</p>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="oid">#NXK-10421</div>
+            <div class="odate">Placed on 1 June 2025</div>
+          </div>
+          <span class="status-pill status-delivered">✓ Delivered</span>
+        </div>
+        <ul class="order-items">
+          <li>Premium Silk Kurta Set × 1</li>
+          <li>Vitamin C Face Serum 30ml × 2</li>
+        </ul>
+        <div class="order-footer">
+          <span class="order-total">Total: ₹2,097</span>
+          <button class="btn-track">Track Order</button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="oid">#NXK-10387</div>
+            <div class="odate">Placed on 24 May 2025</div>
+          </div>
+          <span class="status-pill status-shipped">🚚 Shipped</span>
+        </div>
+        <ul class="order-items">
+          <li>Wireless Noise Cancelling Headphones × 1</li>
+        </ul>
+        <div class="order-footer">
+          <span class="order-total">Total: ₹2,499</span>
+          <button class="btn-track">Track Order</button>
+        </div>
+      </div>
+
+      <div class="order-card">
+        <div class="order-card-header">
+          <div>
+            <div class="oid">#NXK-10351</div>
+            <div class="odate">Placed on 18 May 2025</div>
+          </div>
+          <span class="status-pill status-processing">⏳ Processing</span>
+        </div>
+        <ul class="order-items">
+          <li>Digital Air Fryer 4.5L × 1</li>
+          <li>Anti-Slip Yoga Mat 6mm × 1</li>
+        </ul>
+        <div class="order-footer">
+          <span class="order-total">Total: ₹4,098</span>
+          <button class="btn-track">Track Order</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── State ──
+  let isLoggedIn = false;
+  let currentUser = {};
+  let cartCount = 0;
+
+  // ── Modal ──
+  function openModal(tab) {
+    document.getElementById('modal-overlay').classList.add('open');
+    switchTab(tab || 'login');
+    // close dropdown
+    document.querySelectorAll('.dropdown').forEach(d => d.style.removeProperty('display'));
+  }
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+  function switchTab(tab) {
+    document.getElementById('form-login').style.display  = tab === 'login'  ? 'block' : 'none';
+    document.getElementById('form-signup').style.display = tab === 'signup' ? 'block' : 'none';
+    document.getElementById('tab-login').classList.toggle('active',  tab === 'login');
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+  }
+
+  // ── Auth ──
+  function doLogin() {
+    const email = document.getElementById('login-email').value.trim();
+    const pass  = document.getElementById('login-password').value;
+    if (!email || !pass) { alert('Please enter your email and password.'); return; }
+    // Simulate login
+    currentUser = { name: email.split('@')[0].replace(/\./g,' ').replace(/\b\w/g, c => c.toUpperCase()), email };
+    loginSuccess();
+  }
+  function doSignup() {
+    const name  = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const pass  = document.getElementById('signup-password').value;
+    if (!name || !email || !pass) { alert('Please fill in all fields.'); return; }
+    currentUser = { name, email };
+    loginSuccess();
+  }
+  function loginSuccess() {
+    isLoggedIn = true;
+    closeModal();
+    // Update account label
+    document.getElementById('account-label').textContent = currentUser.name.split(' ')[0];
+    // Populate dropdowns
+    document.getElementById('dd-username').textContent   = currentUser.name;
+    document.getElementById('dd-email').textContent      = currentUser.email;
+    document.getElementById('drawer-name').textContent   = currentUser.name;
+    document.getElementById('drawer-email').textContent  = currentUser.email;
+    document.getElementById('drawer-avatar').textContent = currentUser.name.charAt(0).toUpperCase();
+    // Toggle dropdown visibility
+    document.getElementById('dropdown-loggedout').style.display = 'none';
+    document.getElementById('dropdown-loggedin').style.display  = 'block';
+  }
+  function logout() {
+    isLoggedIn = false;
+    currentUser = {};
+    document.getElementById('account-label').textContent        = 'Account';
+    document.getElementById('dropdown-loggedout').style.display = 'block';
+    document.getElementById('dropdown-loggedin').style.display  = 'none';
+    closeOrdersPanel();
+  }
+
+  // ── Orders Panel ──
+  function openOrdersPanel() {
+    document.getElementById('orders-panel').classList.add('open');
+  }
+  function closeOrdersPanel() {
+    document.getElementById('orders-panel').classList.remove('open');
+  }
+  // Click backdrop to close
+  document.getElementById('orders-panel').addEventListener('click', function(e) {
+    if (e.target === this) closeOrdersPanel();
+  });
+
+  // ── Cart ──
+  function addToCart(btn) {
+    cartCount++;
+    document.getElementById('cart-count').textContent = cartCount;
+    btn.textContent = '✓ Added!';
+    btn.style.background = '#27ae60';
+    setTimeout(() => { btn.textContent = 'Add to Cart'; btn.style.background = ''; }, 1500);
+  }
+
+  // ── Close modal on overlay click ──
+  document.getElementById('modal-overlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ── Wishlist / Cart placeholders ──
+  function openWishlist() { if (!isLoggedIn) { openModal('login'); } else { alert('Wishlist coming soon!'); } }
+  function openCart()     { alert('Cart page coming soon!'); }
+</script>
+</body>
+</html>
